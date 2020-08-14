@@ -7,9 +7,9 @@ class NumberNotValid(Exception):
         message -- explanation about the error
     """
 
-    def __init__(self, number, message='The input number it\'s not valid. Number contains , or .'):
+    def __init__(self, number):
         self.number = number
-        self.message = message
+        self.message = f'The input number {self.number} it\'s not valid. Insert only numbers!!!'
         super().__init__(self.message)
 
     def __str__(self):

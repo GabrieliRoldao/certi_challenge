@@ -1,9 +1,11 @@
-from numbers_to_word.exceptions.number_not_valid import NumberNotValid
-from numbers_to_word.numbers.thousand import Thousand
-from numbers_to_word.numbers.hundred import Hundred
-from numbers_to_word.numbers.ten import Ten
-from numbers_to_word.numbers.teens import Teens
-from numbers_to_word.numbers.unit import Unit
+import re
+from service.numbers_to_word.exceptions.number_not_valid import NumberNotValid
+from service.numbers_to_word.exceptions.number_out_range import NumberIsOutOfRangeException
+from service.numbers_to_word.numbers.thousand import Thousand
+from service.numbers_to_word.numbers.hundred import Hundred
+from service.numbers_to_word.numbers.ten import Ten
+from service.numbers_to_word.numbers.teens import Teens
+from service.numbers_to_word.numbers.unit import Unit
 
 
 class TransformNumbersToWord:
@@ -14,21 +16,23 @@ class TransformNumbersToWord:
         self.group_number_class = 0
         self.negative_number = False
         self.number_as_string = ''
+        self.unit = Unit()
+        self.ten = Ten()
+        self.teens = Teens()
+        self.hundred = Hundred()
 
     def read_number(self):
-        try:
-            if self.is_a_valid_number():
-                self.__transform_to_word()
-                return ' '.join(self.words).strip()
-        except NumberNotValid as ex:
+        if not self.is_a_valid_number():
             raise NumberNotValid(self.number)
-        except Exception as ex:
-            raise Exception(f'deu ruim {ex}')
+        if self.__is_number_out_of_range():
+            raise NumberIsOutOfRangeException(self.number)
 
-        return 'An error has occurred'
+        self.__transform_to_word()
+        return ' '.join(self.words).strip()
 
     def __transform_to_word(self):
-        if self.number == 0:
+        is_only_zero = bool(re.match(r"^0+$", str(self.number)))
+        if is_only_zero:
             self.words.append('zero')
         else:
             self.__transform_number_to_string()
@@ -83,9 +87,13 @@ class TransformNumbersToWord:
                     self.__append_the_suffix_thousand(current_group)
 
     def is_a_valid_number(self):
-        if not isinstance(self.number, int):
-            raise NumberNotValid
+        only_number = bool(re.match(r"^-?\d+$", str(self.number)))
+        if not only_number:
+            raise NumberNotValid(self.number)
         return True
+
+    def __is_number_out_of_range(self):
+        return int(self.number) > 99999 or int(self.number) < -99999
 
     def __transform_number_to_string(self):
         self.number_as_string = str(self.number)
@@ -109,22 +117,22 @@ class TransformNumbersToWord:
         self.words.append('e')
 
     def __append_number_from_eleven_to_nineteen(self, teen):
-        self.words.append(Teens.number_as_word(teen))
+        self.words.append(self.teens.get_number_as_word(teen))
 
     def __append_the_number_ten(self, number_ten):
-        self.words.append(Ten.number_as_word(number_ten))
+        self.words.append(self.ten.get_number_as_word(number_ten))
 
     def __append_ten_number(self, ten_number):
-        self.words.append(Ten.number_as_word(ten_number))
+        self.words.append(self.ten.get_number_as_word(ten_number))
 
     def __append_unit_number(self, unit_number):
-        self.words.append(Unit.number_as_word(unit_number))
+        self.words.append(self.unit.get_number_as_word(unit_number))
 
     def __append_hundred_number(self, hundred_number):
-        self.words.append(Hundred.number_as_word(hundred_number))
+        self.words.append(self.hundred.get_number_as_word(hundred_number))
 
     def __append_the_number_hundred(self):
-        self.words.append(Hundred.number_as_word(10))
+        self.words.append(self.hundred.get_number_as_word(10))
 
     def __append_the_suffix_thousand(self, current_group):
         self.words.append(Thousand.number_as_word(current_group))

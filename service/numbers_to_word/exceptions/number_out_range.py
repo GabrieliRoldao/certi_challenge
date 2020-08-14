@@ -7,9 +7,9 @@ class NumberIsOutOfRangeException(Exception):
         message -- explanation about the error
     """
 
-    def __init__(self, number, message='The input number is out of range'):
+    def __init__(self, number):
         self.number = number
-        self.message = message
+        self.message = f'The input number {self.number} is out of range. Range is between -99999 and 99999!'
         super().__init__(self.message)
 
     def __str__(self):
