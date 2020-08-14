@@ -1,4 +1,7 @@
-class Unit:
+from service.numbers_to_word.numbers.numeric_class import NumericClass
+
+
+class Unit(NumericClass):
     def __init__(self):
         self.numbers_and_word = ['', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove']
 

@@ -1,4 +1,7 @@
-class Teens:
+from service.numbers_to_word.numbers.numeric_class import NumericClass
+
+
+class Teens(NumericClass):
 
     def __init__(self):
         self.numbers_and_word = ['', 'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete',

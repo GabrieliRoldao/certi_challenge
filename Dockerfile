@@ -1,11 +1,12 @@
 FROM python:3.8
 WORKDIR /app
 
-ADD numbers_to_word /app/service
+ADD service /app/service
 ADD api /app/api
+ADD logger /app/logger
 ADD requirements.txt /app/requirements.txt
+ADD run.py /app/run.py
 
 RUN pip install -r requirements.txt
 
-#RUN ls
-#CMD python run.py
+CMD python run.py

@@ -1,4 +1,7 @@
-class Hundred:
+from service.numbers_to_word.numbers.numeric_class import NumericClass
+
+
+class Hundred(NumericClass):
 
     def __init__(self):
         self.numbers_and_word = ['', 'cento', 'duzentos', 'trezentos', 'quatrocentos', 'quinhentos', 'seiscentos',

@@ -112,6 +112,12 @@ class NumbersTest(unittest.TestCase):
         self.transform_number_to_word = TransformNumbersToWord(number)
         self.assertEqual('zero', self.transform_number_to_word.read_number())
 
+    def test_should_return_vinte(self):
+        number = '00020'
+
+        self.transform_number_to_word = TransformNumbersToWord(number)
+        self.assertEqual('vinte', self.transform_number_to_word.read_number())
+
     def test_should_raise_number_not_valid_exception_when_number_is_float(self):
         number = 90.01
 
